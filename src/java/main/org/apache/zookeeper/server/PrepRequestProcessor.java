@@ -132,6 +132,10 @@ public class PrepRequestProcessor extends ZooKeeperCriticalThread implements
                     break;
                 }
                 pRequest(request);
+
+                LOG.info("------ important log ------ ");
+
+
             }
         } catch (RequestProcessorException e) {
             if (e.getCause() instanceof XidRolloverException) {

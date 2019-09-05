@@ -1,21 +1,16 @@
-package org.apache.zookeeper.demo;
+package org.apache.zookeeper.mydemo;
 
-import com.google.common.collect.Lists;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.Stat;
-import org.apache.zookeeper.server.ZooKeeperServerMain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.PrintStream;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,13 +19,19 @@ import java.util.List;
  * Time: 14:53
  * Desc: zookeeper 原生客户端
  */
-public class ZookeeperPrimaryClient {
+public class ZookeeperPrimaryClient extends Thread {
 
     private static final Logger LOG =
             LoggerFactory.getLogger(ZookeeperPrimaryClient.class);
 
+    public ZookeeperPrimaryClient(String name) {
+        super(name);
+    }
+
     public static void main(String[] args) throws
             Exception {
+
+
         ZooKeeper zk = new ZooKeeper("localhost:2181", 3000, new Watcher() {
 
             @Override
@@ -42,20 +43,12 @@ public class ZookeeperPrimaryClient {
 
         });
 
-        Stat stat = new Stat();
 
+        byte[] data = zk.getData("/eclipse", true, new Stat());
 
-//        for (int i = 0; i < 128; i++) {
-//            zk.create("/niexianglin"+ i, "121312".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
-//
-//            Thread.sleep(100);
-//        }
-//
+        new CountDownLatch(1).await();
 
-
-        byte[] data = zk.getData("/niexianglin12", null, new Stat());
-
-        System.out.printf(new String(data, Charset.defaultCharset()));
 
     }
+
 }

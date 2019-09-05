@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.zookeeper.jmx.ManagedUtil;
 import org.apache.zookeeper.server.persistence.FileTxnSnapLog;
 import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
+import sun.rmi.runtime.Log;
 
 /**
  * This class starts and runs a standalone ZooKeeperServer.
@@ -53,6 +54,8 @@ public class ZooKeeperServerMain {
         ZooKeeperServerMain main = new ZooKeeperServerMain();
         try {
             main.initializeAndRun(args);
+
+            LOG.info("------ important log ------ ");
         } catch (IllegalArgumentException e) {
             LOG.error("Invalid arguments, exiting abnormally", e);
             LOG.info(USAGE);
@@ -87,6 +90,8 @@ public class ZooKeeperServerMain {
         }
 
         runFromConfig(config);
+
+        LOG.info("------ important log ------ ");
     }
 
     /**
@@ -125,6 +130,8 @@ public class ZooKeeperServerMain {
             shutdownLatch.await();
             shutdown();
 
+            // join 是插队的意思，cnxFactory 线程执行优先执行完成 ------ important log ------
+            // yield 是投降的意思，放弃执行权
             cnxnFactory.join();
             if (zkServer.canShutdown()) {
                 zkServer.shutdown(true);
