@@ -1980,7 +1980,7 @@ xmlns:cs="antlib:com.puppycrawl.tools.checkstyle">
      </target>
 
      <target name="clean-eclipse" description="Clean eclipse files">
-       <delete file=".classpath" />
+       <delete file=".classpath.temp" />
        <delete file=".eclipse" />
        <delete file=".project" />
        <delete dir=".settings" />
